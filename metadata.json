@@ -1,0 +1,6 @@
+{
+  "name": "Vasuki",
+  "description": "Premium ethnic wear clothing brand specializing in traditional and contemporary Indian fashion, showcasing sarees, lehengas, kurtis, and custom bridal wear with elegant pastel aesthetics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
