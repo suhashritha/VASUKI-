@@ -27,7 +27,7 @@ import WhatsAppButton from './components/WhatsAppButton';
 
 import { Product } from './types';
 
-export default function App() {
+export default function suha() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [inquiryProduct, setInquiryProduct] = useState<Product | null>(null);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function App() {
   const [bookingName, setBookingName] = useState('');
   const [bookingPhone, setBookingPhone] = useState('');
   const [bookingDate, setBookingDate] = useState('');
-  const [bookingTime, setBookingTime] = useState('11:00');
+  const [bookingTime, setBookingTime] = useState('09:00');
   const [bookingStyle, setBookingStyle] = useState('bridal');
   const [bookingErrors, setBookingErrors] = useState<Record<string, string>>({});
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
@@ -250,7 +250,7 @@ export default function App() {
                     type="text"
                     value={bookingName}
                     onChange={(e) => setBookingName(e.target.value)}
-                    placeholder="e.g., Deepika Padukone"
+                    placeholder="e.g., suhashritha mallapureddy"
                     className={`px-4 py-2.5 rounded-xl border text-sm bg-amber-50/10 dark:bg-neutral-900/40 text-neutral-800 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-[#C9A86A] transition-colors ${
                       bookingErrors.name ? 'border-red-400' : 'border-amber-200/20'
                     }`}
@@ -330,7 +330,6 @@ export default function App() {
                     <option value="bridal">Bespoke Bridal Lehenga / Saree fit</option>
                     <option value="festive">Festive Wear & Occasions Styling</option>
                     <option value="blouse">Direct Blouse / Stitching Orders</option>
-                    <option value="family">Coordinated Family Sizing</option>
                   </select>
                 </div>
 
