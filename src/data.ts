@@ -177,7 +177,7 @@ export const PRODUCTS_DATA: Product[] = [
     name: 'The Royal Crimson Velvet Lehenga',
     category: 'Wedding Collection',
     price: '₹1,65,000',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=600',
+    image: 'https://files.catbox.moe/4yy0n6.png',
     description: 'Heavy micro-velvet bridal lehenga with royal red hues, detailed double dupatta styling.',
     tags: ['Bridal', 'Velvet', 'Luxury', 'Lehenga'],
     isNew: true,
