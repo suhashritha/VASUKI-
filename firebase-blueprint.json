@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "Inquiry": {
+      "title": "Product or Consultation Inquiry",
+      "description": "Customer inquiry regarding a custom dress piece or collection item",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the inquirer"
+        },
+        "phone": {
+          "type": "string",
+          "description": "WhatsApp or contact number"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the inquirer"
+        },
+        "occasionType": {
+          "type": "string",
+          "description": "The selected occasion type (e.g. wedding, festive, reception, etc.)"
+        },
+        "message": {
+          "type": "string",
+          "description": "Custom styling requests or requirements details"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp of the inquiry"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Linked product ID, if any"
+        },
+        "productName": {
+          "type": "string",
+          "description": "Linked product name, if any"
+        },
+        "productPrice": {
+          "type": "string",
+          "description": "Linked product price, if any"
+        }
+      },
+      "required": ["name", "phone", "email", "occasionType", "message", "createdAt"]
+    },
+    "Booking": {
+      "title": "Bespoke Styling Virtual Booking",
+      "description": "Reserved appointment for royal consultation and sizing fitments",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the user"
+        },
+        "phone": {
+          "type": "string",
+          "description": "WhatsApp contact number for the session"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "The selected appointment date"
+        },
+        "time": {
+          "type": "string",
+          "format": "time",
+          "description": "The selected appointment time slot"
+        },
+        "style": {
+          "type": "string",
+          "description": "Selected styling design category"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp of the booking"
+        }
+      },
+      "required": ["name", "phone", "date", "time", "style", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Collection of bespoke fashion inquiries submitted via form"
+    },
+    "/bookings/{bookingId}": {
+      "schema": "Booking",
+      "description": "Collection of boutique session appointments booked via modal"
+    }
+  }
+}

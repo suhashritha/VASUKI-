@@ -26,6 +26,8 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 
 import { Product } from './types';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db, handleFirestoreError, OperationType } from './firebase';
 
 export default function suha() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -73,7 +75,7 @@ export default function suha() {
     setBookingErrors({});
   };
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errors: Record<string, string> = {};
     if (!bookingName.trim()) errors.name = 'Please enter your name';
@@ -92,14 +94,26 @@ export default function suha() {
     setBookingErrors({});
     setIsBookingSubmitting(true);
 
-    // Simulate scheduling booking slot
-    setTimeout(() => {
+    const path = 'bookings';
+    try {
+      await addDoc(collection(db, path), {
+        name: bookingName.trim(),
+        phone: bookingPhone.trim(),
+        date: bookingDate,
+        time: bookingTime,
+        style: bookingStyle,
+        createdAt: serverTimestamp(),
+      });
+
       setIsBookingSubmitting(false);
       setIsBookingSuccess(true);
       setBookingName('');
       setBookingPhone('');
       setBookingDate('');
-    }, 1200);
+    } catch (error) {
+      setIsBookingSubmitting(false);
+      handleFirestoreError(error, OperationType.CREATE, path);
+    }
   };
 
   return (

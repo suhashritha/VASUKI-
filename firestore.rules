@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net: default-deny catch-all blocking all unrequested read/writes
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Valid ID checker helper to guard against poisoning ID attacks
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    // Inquiries Collection rules
+    match /inquiries/{inquiryId} {
+      allow create: if isValidId(inquiryId) && isValidInquiry(request.resource.data);
+      allow read, update, delete: if false;
+    }
+    
+    function isValidInquiry(data) {
+      return data.keys().hasAll(['name', 'phone', 'email', 'occasionType', 'message', 'createdAt'])
+        && data.keys().size() >= 6 
+        && data.keys().size() <= 9
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 30
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 100
+        && data.occasionType is string && data.occasionType.size() > 0 && data.occasionType.size() <= 50
+        && data.message is string && data.message.size() > 0 && data.message.size() <= 1000
+        && data.createdAt == request.time
+        && (!data.keys().hasAny(['productId']) || (data.productId == null || (data.productId is string && data.productId.size() <= 64)))
+        && (!data.keys().hasAny(['productName']) || (data.productName == null || (data.productName is string && data.productName.size() <= 150)))
+        && (!data.keys().hasAny(['productPrice']) || (data.productPrice == null || (data.productPrice is string && data.productPrice.size() <= 30)));
+    }
+    
+    // Bookings Collection rules
+    match /bookings/{bookingId} {
+      allow create: if isValidId(bookingId) && isValidBooking(request.resource.data);
+      allow read, update, delete: if false;
+    }
+    
+    function isValidBooking(data) {
+      return data.keys().hasAll(['name', 'phone', 'date', 'time', 'style', 'createdAt'])
+        && data.keys().size() == 6
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 30
+        && data.date is string && data.date.size() > 0 && data.date.size() <= 20
+        && data.time is string && data.time.size() > 0 && data.time.size() <= 20
+        && data.style is string && data.style.size() > 0 && data.style.size() <= 50
+        && data.createdAt == request.time;
+    }
+  }
+}

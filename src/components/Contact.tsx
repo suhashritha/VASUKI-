@@ -7,6 +7,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, MessageSquare, Send, CheckCircle, Clock, Facebook, Instagram, Youtube, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db, handleFirestoreError, OperationType } from '../firebase';
 
 interface ContactProps {
   inquiryProduct: Product | null;
@@ -75,7 +77,7 @@ export default function Contact({ inquiryProduct, clearInquiryProduct }: Contact
     return errors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
@@ -84,8 +86,20 @@ export default function Contact({ inquiryProduct, clearInquiryProduct }: Contact
     }
 
     setIsSubmitting(true);
-    // Simulate real API submission
-    setTimeout(() => {
+    const path = 'inquiries';
+    try {
+      await addDoc(collection(db, path), {
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        occasionType: formData.occasionType,
+        message: formData.message.trim(),
+        createdAt: serverTimestamp(),
+        productId: inquiryProduct?.id || null,
+        productName: inquiryProduct?.name || null,
+        productPrice: inquiryProduct?.price || null,
+      });
+
       setIsSubmitting(false);
       setIsSubmitSuccess(true);
       setFormData({
@@ -96,7 +110,10 @@ export default function Contact({ inquiryProduct, clearInquiryProduct }: Contact
         message: '',
       });
       clearInquiryProduct();
-    }, 1500);
+    } catch (error) {
+      setIsSubmitting(false);
+      handleFirestoreError(error, OperationType.CREATE, path);
+    }
   };
 
   const mapIframeUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d110052.5414841961!2d78.0263686!3d30.3164966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c35b3e2049%3A0x275932c8151413a3!2sDehradun%2C%20Uttarakhand%20248001!5e0!3m2!1sen!2sin!4v1781085200000!5m2!1sen!2sin";
